@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import habitat_pl.viz.corine as corine
+import lucera.viz.corine as corine
 
 def make_embeddings_plots(embedding_pca, embedding_tsne, embedding_umap, labels):
 
@@ -69,7 +69,7 @@ def make_umap_plot(embedding_umap, labels, alpha=0.7, ax=None, legend=False):
 
     # Plot the result
     if not ax:
-        plt.figure(figsize=(8, 8))
+        plt.figure(figsize=(12, 12))
         fig, ax = plt.subplots()
         #legend = True
 
@@ -124,5 +124,5 @@ def make_umap_plot(embedding_umap, labels, alpha=0.7, ax=None, legend=False):
     ax.set_box_aspect(1)
     plt.tight_layout()
 
-    return ax
+    return fig, ax
     #plt.show()
