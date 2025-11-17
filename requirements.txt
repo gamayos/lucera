@@ -1,2 +1,4 @@
 # Requirements for lucera project
-# Add your project dependencies here
+earthengine-api
+jupyter
+notebook
