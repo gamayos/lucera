@@ -11,7 +11,7 @@ def infer_from_aoi(aoi_feature,
 
     # AlphaEarth embeddings
     emb_ic = (ee.ImageCollection('GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL')
-            .filterDate('2021-01-01', '2022-01-01')
+            .filterDate(f'{year}-01-01', f'{int(year)+1}-01-01')
             .filterBounds(aoi_geom))
     emb_img = emb_ic.mosaic().clip(aoi_geom)
 
@@ -21,7 +21,7 @@ def infer_from_aoi(aoi_feature,
         emb_img = emb_img.rename([f"embedding_{i}" for i in range(64)])
 
     # Sample WITH geometries
-    scale = 100
+    scale = scale
     samples = emb_img.sample(
         region=aoi_geom,
         scale=scale,

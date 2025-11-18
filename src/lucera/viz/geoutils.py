@@ -2,9 +2,8 @@ import numpy as np
 import rasterio
 from rasterio.transform import from_origin
 
-def labels_to_corine_geotiff(
-    lons,
-    lats,
+def labels_to_clc_geotiff(
+    gdf,
     labels,
     legend_dict,
     out_path,
@@ -28,6 +27,9 @@ def labels_to_corine_geotiff(
     decimals : int
         Number of decimals to round coords when inferring grid.
     """
+
+    lons = gdf.geometry.x.to_numpy()
+    lats = gdf.geometry.y.to_numpy()
 
     lons = np.asarray(lons)
     lats = np.asarray(lats)
