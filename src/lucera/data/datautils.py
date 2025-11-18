@@ -348,6 +348,27 @@ def match_clusters_to_classes(Y_cluster, Y_corine):
 # print(mapping)
 # print(table)
 
+from sklearn.cluster import SpectralClustering
+
+def clc_remap_to_regional(X, Y):
+
+    clusterer = SpectralClustering(
+        n_clusters=100,
+        eigen_solver='arpack',
+        affinity='rbf', #'nearest_neighbors',  # or 'rbf'
+        n_neighbors=20,                # used when affinity='nearest_neighbors'
+        assign_labels='kmeans',
+        random_state=42,
+        #metric='cosine'
+    )
+
+    labels = clusterer.fit_predict(X)
+    mapping, contingency = match_clusters_to_classes(labels, Y)
+    YY = [mapping[l] for l in labels]
+
+    return YY
+
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC

@@ -126,3 +126,36 @@ def make_umap_plot(embedding_umap, labels, alpha=0.7, ax=None, legend=False):
 
     return fig, ax
     #plt.show()
+
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+
+def make_confusion_matrix(y_test, y_pred):
+
+    # y_true = ground truth labels
+    # y_pred = model predictions
+    # classes = sorted list of class names (strings or integers)
+
+    classes = sorted(list(set(y_test)))
+
+    # Normalize rows (true classes)
+    cm = confusion_matrix(y_test, y_pred, labels=classes, normalize='true')
+
+    fig = plt.figure(figsize=(8, 6))
+
+    sns.heatmap(
+        cm,
+        cmap="Blues",       # or "Blues", "magma", etc.
+        annot=False,          # turn OFF numbers
+        cbar=True,            # keep colorbar for interpretation
+        xticklabels=classes,
+        yticklabels=classes,
+        square=True,
+    )
+
+    plt.xlabel("Predicted Label")
+    plt.ylabel("True Label")
+    plt.title("Normalized Confusion Matrix (colors only)")
+    plt.tight_layout()
+    
+    return fig
