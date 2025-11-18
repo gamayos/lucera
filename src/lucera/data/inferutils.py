@@ -17,15 +17,15 @@ def infer_from_aoi(aoi_feature,
 
     # Ensure we have band names embedding_0..embedding_63
     bands = emb_img.bandNames().getInfo()
-    if len(bands) == 64 and bands[0] == 'b1':
-        emb_img = emb_img.rename([f"embedding_{i}" for i in range(64)])
+    #if len(bands) == 64 and bands[0] == 'b1':
+    #    emb_img = emb_img.rename([f"embedding_{i}" for i in range(64)])
 
     # Sample WITH geometries
     scale = scale
     samples = emb_img.sample(
         region=aoi_geom,
         scale=scale,
-        numPixels=5000,
+        numPixels=1e13,
         geometries=True
     )
 
@@ -42,7 +42,7 @@ def infer_from_aoi(aoi_feature,
     y_pred = clf.predict(X)
 
     # 3. Attach predictions to DataFrame
-    gdf["corine_class"] = y_pred
+    gdf["clc"] = y_pred
 
     return gdf
 
