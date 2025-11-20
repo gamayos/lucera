@@ -46,36 +46,39 @@ def scan_country_regions(data, country, regions=None, v=False):
     
     for n, region in enumerate(regions):
         print(f'Processing {region}, {country} ...')
-        try:
-            scan_region_for_samples(data, region)
-        except:
-            print('Failed.')
+        scan_region_for_samples(data, region)
         print()
-        #if n>2: break
 
 import random
 def scan_region_for_samples(data, region, v=False):
 
-    region_geo = (ee.FeatureCollection('FAO/GAUL/2015/level1')
+    geom = (ee.FeatureCollection('FAO/GAUL/2015/level1')
                         .filter(ee.Filter.eq('ADM1_NAME', region))
                         .geometry())
 
+    if geom.getInfo()['type'] == 'MultiPolygon':
+        #print('fixing geometry.')
+        single_hull = geom.convexHull(maxError=100)
+        geom = single_hull.simplify(100)
+
     emb = (ee.ImageCollection('GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL')
        .filterDate('2018-01-01','2019-01-01')
-       .filterBounds(region_geo)
+       .filterBounds(geom)
        .mosaic())
 
-    poly = h3.LatLngPoly(region_geo.getInfo()['coordinates'][0])
+    geoinfo = geom.getInfo()
+    poly = h3.LatLngPoly(geoinfo['coordinates'][0])
 
     cells4 = h3.h3shape_to_cells_experimental(poly, res=4, contain='overlap')
     if len(cells4)>16: cells4 = random.sample(cells4, 16)
 
     dataset = {l: np.zeros((0,64)) for l in data.labels}
     for n4, cell4 in enumerate(cells4):
-        cell4dataset = {l: np.zeros((0,64)) for l in data.labels}
-        cells6 = get_cell_children_in_region(cell4, region_geo.getInfo(), res=6)
-        
         print(cell4,end=' ')
+        cell4dataset = {l: np.zeros((0,64)) for l in data.labels}
+        cells6 = get_cell_children_in_region(cell4, geoinfo, res=6)
+        
+        if len(cells6)>16: cells6 = random.sample(cells6, 16)
         for n6, cell in enumerate(cells6):
             aoi = cell_to_feature(cell)
             X, Y = extract_samples(emb, ee.Feature(aoi['geometry']))
