@@ -8,7 +8,7 @@ The system integrates **AI-based super-resolution**, **crowdsourced in-situ veri
 
 The framework was originally developed for the **EU-wide densification of CORINE Land Cover**, expanding its temporal refresh rate from multi-year cycles to **continuous update cadence**, and its spatial resolution down to the **10–1 m scale** through model-based inference and super-resolved Sentinel-2 imagery.
 
-[INNOVATION] The same architecture generalises to global scale, enabling shared rules for dataset versioning, cross-validation, and reliability scoring.
+The same architecture generalises to global scale, enabling shared rules for dataset versioning, cross-validation, and reliability scoring.
 
 ---
 
